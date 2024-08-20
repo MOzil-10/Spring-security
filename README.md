@@ -1,7 +1,7 @@
 ﻿# Spring-security
 
 ## Overview
-vWelcome to the Security System! This application is designed to help users securely manage their authentication and authorization processes. Whether you're signing up for an account or logging in, our system ensures that your information is handled with the highest level of security.
+This application is designed to help users securely manage their authentication and authorization processes. Whether you're signing up for an account or logging in, our system ensures that your information is handled with the highest level of security.
 
 ## Features
 - User Registration: Allows new users to create an account.
