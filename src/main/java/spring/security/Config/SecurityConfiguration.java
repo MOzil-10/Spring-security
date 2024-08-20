@@ -25,6 +25,14 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    /**
+     * Configures the security filter chain, setting up the necessary security configurations such as
+     * CSRF protection, session management, CORS, and request authorization.
+     *
+     * @param http the HttpSecurity object to configure
+     * @return the configured SecurityFilterChain
+     * @throws Exception if any error occurs during the configuration
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -43,6 +51,11 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    /**
+     * Configures CORS settings for the application, specifying allowed origins, methods, headers, and credentials.
+     *
+     * @return the CorsConfigurationSource containing the configured CORS settings
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
