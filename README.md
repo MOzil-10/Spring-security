@@ -21,7 +21,7 @@ This application is designed to help users securely manage their authentication 
 - Enter your email and password.
 - Click "Login" to access your account.
 
-## Understanding Your Token:
+## Understanding the Token:
 - After logging in, you will receive a security token.
 - This token is a piece of information that verifies your identity and allows you to access secured areas of the application.
 - The token also has an expiration time, ensuring that it is valid only for a specific duration.
