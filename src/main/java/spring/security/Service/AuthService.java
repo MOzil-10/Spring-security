@@ -8,5 +8,5 @@ import spring.security.dto.RegisterDto;
 public interface AuthService {
 
     User registerUser(RegisterDto userInput);
-    User authenicateUser(LoginDto userInput);
+    User authenticateUser(LoginDto userInput);
 }

@@ -4,8 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +17,6 @@ import spring.security.Service.JwtService;
 
 import java.io.IOException;
 
-@RequiredArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -27,20 +24,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
+    public JwtAuthenticationFilter(HandlerExceptionResolver handlerExceptionResolver, JwtService jwtService, UserDetailsService userDetailsService) {
+        this.handlerExceptionResolver = handlerExceptionResolver;
+        this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
+    }
+
     /**
      * Filters incoming HTTP requests to authenticate the user based on the JWT token in the Authorization header.
      *
-     * @param request  the HttpServletRequest object that contains the request the client made to the servlet
-     * @param response the HttpServletResponse object that contains the response the servlet returns to the client
-     * @param filterChain the FilterChain object to pass control to the next filter
+     * @param request      the HttpServletRequest object that contains the request the client made to the servlet
+     * @param response     the HttpServletResponse object that contains the response the servlet returns to the client
+     * @param filterChain  the FilterChain object to pass control to the next filter
      * @throws ServletException if the request for the POST could not be handled
-     * @throws IOException if an input or output error is detected when the servlet handles the POST request
+     * @throws IOException      if an input or output error is detected when the servlet handles the POST request
      */
     @Override
     protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
     ) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
 

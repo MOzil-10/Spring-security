@@ -1,6 +1,5 @@
 package spring.security.Config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,10 +12,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import spring.security.Repository.UserRepository;
 
 @Configuration
-@RequiredArgsConstructor
 public class ApplicationConfiguration {
 
     private final UserRepository userRepository;
+
+    public ApplicationConfiguration(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /**
      * Defines a {@link UserDetailsService} bean that is used to load user-specific data during authentication.
@@ -25,7 +27,7 @@ public class ApplicationConfiguration {
      * @throws UsernameNotFoundException if the user is not found in the repository.
      */
     @Bean
-    UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with the email " + username + " does not exist"));
     }
@@ -36,7 +38,7 @@ public class ApplicationConfiguration {
      * @return a {@link BCryptPasswordEncoder} instance used to hash passwords.
      */
     @Bean
-    BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -58,12 +60,10 @@ public class ApplicationConfiguration {
      * @return a {@link DaoAuthenticationProvider} configured with the custom {@link UserDetailsService} and {@link BCryptPasswordEncoder}.
      */
     @Bean
-    AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
-
         return authProvider;
     }
 }

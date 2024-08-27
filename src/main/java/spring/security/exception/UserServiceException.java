@@ -1,2 +1,17 @@
-package spring.security.exception;public class UserServiceException {
+package spring.security.exception;
+
+import org.springframework.http.HttpStatus;
+
+public class UserServiceException extends RuntimeException {
+
+    private final HttpStatus status;
+
+    public UserServiceException(String message, HttpStatus status) {
+        super(message);
+        this.status = status;
+    }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
 }

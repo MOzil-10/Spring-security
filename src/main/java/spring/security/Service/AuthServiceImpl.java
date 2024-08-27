@@ -1,6 +1,7 @@
 package spring.security.Service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -10,13 +11,10 @@ import spring.security.Model.User;
 import spring.security.Repository.UserRepository;
 import spring.security.dto.LoginDto;
 import spring.security.dto.RegisterDto;
+import spring.security.exception.UserServiceException;
 
 import java.util.Optional;
 
-/**
- * Implementation of the AuthService interface that handles user authentication and registration.
- */
-@RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -24,17 +22,23 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager){
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+    }
+
     /**
-     * Registers a new user in the system.
+     * Registers a new user with the given details.
      *
-     * @param userInput The data transfer object containing user registration details.
-     * @return The registered User entity.
-     * @throws IllegalArgumentException if a user with the provided email already exists.
+     * @param userInput the registration details provided by the user
+     * @return the registered User entity
+     * @throws UserServiceException if a user with the same email already exists
      */
     public User registerUser(RegisterDto userInput) {
         Optional<User> existingUser = userRepository.findByEmail(userInput.getEmail());
-        if(existingUser.isPresent()) {
-            throw new IllegalArgumentException("User with email " + userInput.getEmail() + "already exist");
+        if (existingUser.isPresent()) {
+            throw new UserServiceException("User with email " + userInput.getEmail() + " already exists", HttpStatus.CONFLICT);
         }
 
         User user = new User();
@@ -46,15 +50,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * Authenticates a user based on the provided login credentials.
+     * Authenticates a user with the provided credentials.
      *
-     * @param userInput The data transfer object containing user login details.
-     * @return The authenticated User entity.
-     * @throws IllegalArgumentException if the credentials are invalid or the user is not found.
+     * @param userInput the login details provided by the user
+     * @return the authenticated User entity
+     * @throws UserServiceException if the credentials are invalid or the user is not found
      */
-    public User authenicateUser(LoginDto userInput) {
-
-        try{
+    public User authenticateUser(LoginDto userInput) {
+        try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             userInput.getEmail(),
@@ -62,10 +65,10 @@ public class AuthServiceImpl implements AuthService {
                     )
             );
         } catch (AuthenticationException e) {
-            throw new IllegalArgumentException("Invalid credentials");
+            throw new UserServiceException("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
 
         return userRepository.findByEmail(userInput.getEmail())
-                .orElseThrow(()-> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new UserServiceException("User not found", HttpStatus.NOT_FOUND));
     }
 }
