@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="springSecurity" type="Application" factoryName="Application">
+    <envs>
+      <env name="SECURITY_JWT_EXPIRATION_TIME" value="300000" />
+      <env name="SECURITY_JWT_SECRET_KEY" value="3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b" />
+      <env name="SPRING_DATASOURCE_PASSWORD" value="test" />
+      <env name="SPRING_DATASOURCE_URL" value="jdbc:postgresql://localhost:5433/usersDb" />
+      <env name="SPRING_DATASOURCE_USERNAME" value="postgres" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="spring.security.SecurityApplication" />
+    <module name="security" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
