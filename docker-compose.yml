@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  postgresql-db:
+    container_name: postgresql-db
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: postgres
+      POSTGRES_DB: usersDb
+    volumes:
+      - ./postgresql-db:/var/lib/postgresql/data
+      - ./local_database.sql:/docker-entrypoint-initdb.d/local_database.sql
+    ports:
+      - "5433:5432"
+    networks:
+      - app-network
+
+  spring-boot-app:
+    container_name: spring-boot-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgresql-db
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql-db:5432/usersDb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: test
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SECURITY_JWT_SECRET_KEY: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
+      SECURITY_JWT_EXPIRATION_TIME: 300000
+      SERVER_PORT: 8090
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
