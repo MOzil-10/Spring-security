@@ -4,10 +4,10 @@
 This application is designed to help users securely manage authentication and authorization processes. Whether you're signing up for an account or logging in, our system ensures that your information is handled with the highest level of security.
 
 ## Features
-User Registration: Allows new users to create an account.
-User Login: Provides a secure way to log in with your credentials.
-Token Management: Issues a secure token upon login that is used to access various features of the application.
-Dockerized Setup: Easily deploy and manage the application using Docker containers.
+- **User Registration**: Allows new users to create an account.
+- **User Login**: Provides a secure way to log in with your credentials.
+- **Token Management**: Issues a secure token upon login that is used to access various features of the application.
+- **Dockerized Setup**: Easily deploy and manage the application using Docker containers.
 
 ## Database
 This application uses PostgreSQL as the database for storing user data and managing authentication. The database schema is initialized with a script provided in the project.
