@@ -60,6 +60,13 @@ jobs:
         docker tag my-spring-boot-app:latest ${{ secrets.DOCKER_HUB_USERNAME }}/my-spring-boot-app:latest
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-spring-boot-app:latest
 
+   # Step 7: (Optional) Deploy or Run Integration Tests
+    - name: Deploy and Test
+      run: |
+        docker run -d -p 8080:8090 --name spring-boot-app ${{ secrets.DOCKER_HUB_USERNAME }}/my-spring-boot-app:latest
+        sleep 30 # Wait for the app to start
+        curl -f http://localhost:8080/actuator/health
+
     # Cleanup: Remove the container after testing
     - name: Cleanup
       run: docker rm -f spring-boot-app || true
